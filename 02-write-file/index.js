@@ -11,10 +11,13 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
+let isExiting = false;
+
 rl.question('Hey! Enter text or you can also type "exit" or press Ctrl+C to quit.\n', handleInput);
 
 function handleInput(input) {
   if (input.trim().toLowerCase() === 'exit') {
+    isExiting = true;
     console.log('Goodbye!');
     rl.close();
   } else {
@@ -24,7 +27,9 @@ function handleInput(input) {
   }
 }
 
-process.on('SIGINT', () => {
-  console.log('\nGoodbye!');
-  rl.close();
+rl.on('close', () => {
+  if (!isExiting) {
+    console.log('\nGoodbye!');
+  }
+  process.exit();
 });
